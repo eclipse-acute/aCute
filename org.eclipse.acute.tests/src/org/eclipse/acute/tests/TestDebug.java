@@ -30,8 +30,10 @@ import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.ISuspendResume;
+import org.eclipse.debug.internal.ui.DebugUIPlugin;
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.actions.IToggleBreakpointsTarget;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.text.TextSelection;
@@ -55,6 +57,7 @@ public class TestDebug extends AbstractAcuteTest {
 	public void setUpLaunch() throws DebugException {
 		this.launchManager = DebugPlugin.getDefault().getLaunchManager();
 		removeAllLaunches();
+		DebugUIPlugin.getDefault().getPreferenceStore().setValue("org.eclipse.debug.ui.switch_perspective_on_suspend", MessageDialogWithToggle.ALWAYS);
 	}
 
 	private void removeAllLaunches() throws DebugException {

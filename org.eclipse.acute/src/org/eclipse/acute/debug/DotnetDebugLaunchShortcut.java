@@ -27,6 +27,7 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationType;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
+import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.ILaunchShortcut2;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -38,21 +39,11 @@ import org.eclipse.ui.IFileEditorInput;
 public class DotnetDebugLaunchShortcut implements ILaunchShortcut2 {
 
 	@Override public void launch(ISelection selection, String mode) {
-		try {
-			getLaunchConfigurations(selection)[0].launch(mode, null);
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DebugUITools.launch(getLaunchConfigurations(selection)[0], mode);
 	}
 
 	@Override public void launch(IEditorPart editor, String mode) {
-		try {
-			getLaunchConfigurations(editor)[0].launch(mode, null);
-		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		DebugUITools.launch(getLaunchConfigurations(editor)[0], mode);
 	}
 
 	@Override public ILaunchConfiguration[] getLaunchConfigurations(ISelection selection) {
