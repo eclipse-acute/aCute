@@ -45,12 +45,6 @@
    <bundle id="org.eclipse.lsp4j.jsonrpc.debug" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
-   <bundle id="org.eclipse.mylyn.wikitext" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
-   <bundle id="org.eclipse.mylyn.wikitext.markdown" version="0.0.0">
-      <category name="Dependencies"/>
-   </bundle>
    <bundle id="com.google.guava" version="0.0.0">
       <category name="Dependencies"/>
    </bundle>
