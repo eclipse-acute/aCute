@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat Inc. and others.
+ * Copyright (c) 2017, 2025 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.acute.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -38,11 +38,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.tests.harness.util.DisplayHelper;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 public class TestLSPIntegration extends AbstractAcuteTest {
 
 	@Override
+	@BeforeEach
 	public void setUp() throws Exception {
 		super.setUp();
 		LanguageServerPlugin.getDefault().getPreferenceStore().putValue("org.eclipse.acute.Omnisharp.file.logging.enabled", Boolean.toString(true));
@@ -91,7 +93,8 @@ public class TestLSPIntegration extends AbstractAcuteTest {
 				return false;
 			}
 		});
-		assertNotEquals("LS Document listener was not setup after 5s", Collections.emptyList(), getDocumentListenersMethod.invoke(document));
+		assertNotEquals(Collections.emptyList(), getDocumentListenersMethod.invoke(document),
+				"LS Document listener was not setup after 5s");
 		// workaround https://github.com/OmniSharp/omnisharp-roslyn/issues/1445
 		DisplayHelper.sleep(5000);
 		// force fake modification for OmniSharp to wake up
