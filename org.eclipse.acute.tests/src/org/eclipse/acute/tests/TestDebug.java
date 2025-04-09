@@ -80,39 +80,29 @@ public class TestDebug extends AbstractAcuteTest {
 		toggleBreakpointsTarget.toggleLineBreakpoints(editor, selection);
 		Set<IDebugTarget> before = new HashSet<>(List.of(launchManager.getDebugTargets()));
 		new DotnetDebugLaunchShortcut().launch(editor, ILaunchManager.DEBUG_MODE);
-		assertTrue("New Debug Target not created", new DisplayHelper() {
-			@Override
-			public boolean condition() {
-				return launchManager.getDebugTargets().length > before.size();
-			}
-		}.waitForCondition(Display.getDefault(), 30000));
+		assertTrue("New Debug Target not created", DisplayHelper.waitForCondition(Display.getDefault(), 30000,
+				() -> launchManager.getDebugTargets().length > before.size()));
 		Set<IDebugTarget> after = new HashSet<>(List.of(launchManager.getDebugTargets()));
 		after.removeAll(before);
 		assertEquals("Extra DebugTarget not found", 1, after.size());
 		IDebugTarget target = after.iterator().next();
-		assertTrue("Debug Target shows no threads", new DisplayHelper() {
-			@Override
-			public boolean condition() {
-				try {
-					return target.getThreads().length > 0;
-				} catch (DebugException e) {
-					e.printStackTrace();
-					return false;
-				}
+		assertTrue("Debug Target shows no threads", DisplayHelper.waitForCondition(Display.getDefault(), 3000, () -> {
+			try {
+				return target.getThreads().length > 0;
+			} catch (DebugException e) {
+				e.printStackTrace();
+				return false;
 			}
-		}.waitForCondition(Display.getDefault(), 3000));
+		}));
 		target.getThreads();
-		assertTrue("No thread is suspended", new DisplayHelper() {
-			@Override
-			public boolean condition() {
-				try {
-					return Arrays.stream(target.getThreads()).anyMatch(ISuspendResume::isSuspended);
-				} catch (DebugException e) {
-					e.printStackTrace();
-					return false;
-				}
+		assertTrue("No thread is suspended", DisplayHelper.waitForCondition(Display.getDefault(), 3000, () -> {
+			try {
+				return Arrays.stream(target.getThreads()).anyMatch(ISuspendResume::isSuspended);
+			} catch (DebugException e) {
+				e.printStackTrace();
+				return false;
 			}
-		}.waitForCondition(Display.getDefault(), 3000));
+		}));
 	}
 
 }
