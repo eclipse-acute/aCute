@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 Red Hat Inc. and others.
+ * Copyright (c) 2017, 2025 Red Hat Inc. and others.
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License v. 2.0 which is available at
@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.acute.tests;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,8 +39,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.texteditor.AbstractTextEditor;
 import org.eclipse.ui.texteditor.ITextEditor;
-import org.junit.After;
-import org.junit.Before;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
 /**
  * Takes care of creating a temporary project and resource before test and to clean
@@ -50,7 +50,7 @@ public class AbstractAcuteTest {
 
 	private Map<String, IProject> provisionedProjects;
 
-	@Before
+	@BeforeEach
 	public void setUp() throws Exception {
 		PlatformUI.getWorkbench().getIntroManager().closeIntro(PlatformUI.getWorkbench().getIntroManager().getIntro());
 		this.provisionedProjects = new HashMap<>();
@@ -85,7 +85,7 @@ public class AbstractAcuteTest {
 		}
 	}
 
-	@After
+	@AfterEach
 	public void tearDown() throws CoreException {
 		this.provisionedProjects.values().forEach(project -> {
 			try {

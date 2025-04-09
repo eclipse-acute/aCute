@@ -70,7 +70,6 @@ spec:
 		stage('Deploy') {
 			when {
 				branch 'master'
-				// TODO deploy all branch from Eclipse.org Git repo
 			}
 			steps {
 				container('jnlp') {
