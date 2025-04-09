@@ -23,9 +23,8 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>com.googlecode.maven-download-plugin</groupId>
+				<groupId>io.github.download-maven-plugin</groupId>
 				<artifactId>download-maven-plugin</artifactId>
-				<version>${download-maven-plugin.version}</version>
 				<executions>
 					<execution>
 						<goals>
