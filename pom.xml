@@ -12,7 +12,6 @@
 		<tycho-version>4.0.12</tycho-version>
 		<tycho.scmUrl>scm:git:https://github.com/eclipse/acute.git</tycho.scmUrl>
 		<jgit.dirtyWorkingTree>error</jgit.dirtyWorkingTree>
-		<download-maven-plugin.version>1.9.0</download-maven-plugin.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -157,6 +156,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-clean-plugin</artifactId>
 					<version>3.4.1</version>
+				</plugin>
+				<plugin>
+					<groupId>io.github.download-maven-plugin</groupId>
+					<artifactId>download-maven-plugin</artifactId>
+					<version>2.0.0</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
