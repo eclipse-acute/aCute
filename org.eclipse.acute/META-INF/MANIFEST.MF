@@ -25,10 +25,11 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.ui.externaltools
 Bundle-RequiredExecutionEnvironment: JavaSE-21
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.core.variables,
- org.apache.commons.compress.archivers.tar,
+Import-Package: org.apache.commons.compress.archivers.tar,
  org.apache.commons.io,
- org.apache.commons.io.input
+ org.apache.commons.io.build;version="[2.18.0,3.0.0)",
+ org.apache.commons.io.input,
+ org.eclipse.core.variables
 Export-Package: org.eclipse.acute;x-internal:=true,
  org.eclipse.acute.debug;x-internal:=true
 Automatic-Module-Name: org.eclipse.acute

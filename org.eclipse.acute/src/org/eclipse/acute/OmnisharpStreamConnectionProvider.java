@@ -94,7 +94,7 @@ public class OmnisharpStreamConnectionProvider implements StreamConnectionProvid
 					if (!entry.isDirectory()) {
 						File targetFile = new File(serverPath, entry.getName());
 						targetFile.getParentFile().mkdirs();
-						InputStream in = new BoundedInputStream(tarStream, entry.getSize()); // mustn't be closed
+						InputStream in = BoundedInputStream.builder().setMaxCount(entry.getSize()).setInputStream(tarStream).get(); // mustn't be closed
 						try (
 							FileOutputStream out = new FileOutputStream(targetFile);
 						) {
