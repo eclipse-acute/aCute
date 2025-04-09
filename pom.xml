@@ -41,7 +41,7 @@
 				<version>${tycho-version}</version>
 				<configuration>
 					<target>
-						<uri>file://${env.PWD}/target-platform/target-platform.target</uri>
+						<file>${maven.multiModuleProjectDirectory}/target-platform/target-platform.target</file>
 					</target>
 					<environments>
 						<environment>
