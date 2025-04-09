@@ -72,28 +72,25 @@ public class TestLSPIntegration extends AbstractAcuteTest {
 			}
 		});
 		viewer.doOperation(SourceViewer.CONTENTASSIST_PROPOSALS);
-		assertTrue(new DisplayHelper() {
-			@Override protected boolean condition() {
-				ICompletionProposal proposal = topProposal.get();
-				return proposal != null && proposal.getDisplayString().contains("WriteLine");
-			}
-		}.waitForCondition(viewer.getTextWidget().getDisplay(), 5000));
+		assertTrue(DisplayHelper.waitForCondition(viewer.getTextWidget().getDisplay(), 5000, () -> {
+			ICompletionProposal proposal = topProposal.get();
+			return proposal != null && proposal.getDisplayString().contains("WriteLine");
+		}));
 	}
 
 	private void workaroundOmniSharpIssue1088(IDocument document) throws NoSuchMethodException, SecurityException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		// Wait for document to be connected
 		Method getDocumentListenersMethod = AbstractDocument.class.getDeclaredMethod("getDocumentListeners");
 		getDocumentListenersMethod.setAccessible(true);
-		new DisplayHelper() {
-			@Override protected boolean condition() {
-				try {
-					return ((Collection<?>)getDocumentListenersMethod.invoke(document)).stream().anyMatch(o -> o.getClass().getName().contains("lsp4e"));
-				} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-					e.printStackTrace();
-					return false;
-				}
+		DisplayHelper.waitForCondition(Display.getDefault(), 5000, () -> {
+			try {
+				return ((Collection<?>) getDocumentListenersMethod.invoke(document)).stream()
+						.anyMatch(o -> o.getClass().getName().contains("lsp4e"));
+			} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+				return false;
 			}
-		}.waitForCondition(Display.getDefault(), 5000);
+		});
 		assertNotEquals("LS Document listener was not setup after 5s", Collections.emptyList(), getDocumentListenersMethod.invoke(document));
 		// workaround https://github.com/OmniSharp/omnisharp-roslyn/issues/1445
 		DisplayHelper.sleep(5000);
@@ -109,16 +106,13 @@ public class TestLSPIntegration extends AbstractAcuteTest {
 		IEditorPart editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), csharpSourceFile);
 		SourceViewer viewer = (SourceViewer)getTextViewer(editor);
 		workaroundOmniSharpIssue1088(viewer.getDocument());
-		new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				try {
-					return csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
-				} catch (Exception e) {
-					return false;
-				}
+		DisplayHelper.waitForCondition(Display.getDefault(), 5000, () -> {
+			try {
+				return csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
+			} catch (Exception e) {
+				return false;
 			}
-		}.waitForCondition(Display.getDefault(), 5000);
+		});
 		DisplayHelper.sleep(500); // time to fill marker details
 		IMarker marker = csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO)[0];
 		assertTrue(marker.getType().contains("lsp4e"));

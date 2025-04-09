@@ -29,12 +29,7 @@ public class TestSyntaxHighlighting extends AbstractAcuteTest {
 		IFile csharpSourceFile = getProject("csproj").getFile("Program.cs");
 		TextEditor editor = (TextEditor) IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), csharpSourceFile, "org.eclipse.ui.genericeditor.GenericEditor");
 		StyledText editorTextWidget = (StyledText)editor.getAdapter(Control.class);
-		new DisplayHelper() {
-			@Override
-			protected boolean condition() {
-				return editorTextWidget.getStyleRanges().length > 1;
-			}
-		}.waitForCondition(editorTextWidget.getDisplay(), 4000);
+		DisplayHelper.waitForCondition(editorTextWidget.getDisplay(), 4000, ()-> editorTextWidget.getStyleRanges().length > 1);
 		Assert.assertTrue("There should be multiple styles in editor", editorTextWidget.getStyleRanges().length > 1);
 	}
 
