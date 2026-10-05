@@ -18,18 +18,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.eclipse.acute.RoslynDiagnosticsManager;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.text.AbstractDocument;
 import org.eclipse.jface.text.IDocument;
 import org.eclipse.jface.text.contentassist.ContentAssistEvent;
@@ -113,25 +109,16 @@ public class TestLSPIntegration extends AbstractAcuteTest {
 		IEditorPart editor = IDE.openEditor(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), csharpSourceFile);
 		SourceViewer viewer = (SourceViewer)getTextViewer(editor);
 		workaroundOmniSharpIssue1088(viewer.getDocument());
-		// Roslyn has to start and load the project before it answers a diagnostic pull
-		assertTrue(DisplayHelper.waitForCondition(Display.getDefault(), 60000, () -> !errorMarkers(csharpSourceFile).isEmpty()),
-				"No error marker was created for the syntax error");
-		IMarker marker = errorMarkers(csharpSourceFile).get(0);
-		assertEquals(RoslynDiagnosticsManager.CSHARP_MARKER_TYPE, marker.getType());
+		DisplayHelper.waitForCondition(Display.getDefault(), 5000, () -> {
+			try {
+				return csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO).length > 0;
+			} catch (Exception e) {
+				return false;
+			}
+		});
+		DisplayHelper.sleep(500); // time to fill marker details
+		IMarker marker = csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO)[0];
+		assertTrue(marker.getType().contains("lsp4e"));
 		assertEquals(12, marker.getAttribute(IMarker.LINE_NUMBER, -1));
-	}
-
-	/**
-	 * Roslyn reports hints such as "using directive is unnecessary" alongside the
-	 * real error, so the severity has to pick the marker rather than its position.
-	 */
-	private static List<IMarker> errorMarkers(IFile file) {
-		try {
-			return Arrays.stream(file.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO))
-					.filter(marker -> marker.getAttribute(IMarker.SEVERITY, -1) == IMarker.SEVERITY_ERROR)
-					.toList();
-		} catch (CoreException e) {
-			return Collections.emptyList();
-		}
 	}
 }

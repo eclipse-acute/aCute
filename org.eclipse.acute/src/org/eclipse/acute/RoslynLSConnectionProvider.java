@@ -35,9 +35,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class RoslynLSConnectionProvider implements StreamConnectionProvider {
 
-	/** Must match the server id declared in plugin.xml. */
-	public static final String SERVER_ID = "org.eclipse.acute.roslynLS"; //$NON-NLS-1$
-
 	private static boolean installationAlreadySuggested = false;
 
 	private boolean DEBUG = Boolean.parseBoolean(System.getProperty("roslyn.lsp.debug")) || //$NON-NLS-1$
@@ -77,11 +74,7 @@ public class RoslynLSConnectionProvider implements StreamConnectionProvider {
 			commandLine = "roslyn-language-server --stdio --autoLoadProjects"; //$NON-NLS-1$
 		}
 		try {
-			// Same tokenization as Runtime.exec(String), which this used to call.
 			this.process = launch(List.of(commandLine.trim().split("\\s+"))); //$NON-NLS-1$
-			// Roslyn analyses nothing until a diagnostic is pulled, so kick off the
-			// first round rather than waiting for a refresh that will never come.
-			RoslynDiagnosticsManager.serverStarted();
 		} catch (IOException ex) {
 			if (!installationAlreadySuggested) {
 				Display.getDefault().asyncExec(this::suggestInstallation);

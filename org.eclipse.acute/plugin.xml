@@ -33,7 +33,6 @@
          point="org.eclipse.lsp4e.languageServer">
       <server
             class="org.eclipse.acute.RoslynLSConnectionProvider"
-            clientImpl="org.eclipse.acute.RoslynLanguageClient"
             id="org.eclipse.acute.roslynLS"
             label="org.eclipse.acute.roslynLS"
             singleton="true">
@@ -51,15 +50,6 @@
             contentType="org.eclipse.acute.csproj"
             id="org.eclipse.acute.msbuild">
       </contentTypeMapping>
-   </extension>
-   <extension
-         id="problem"
-         name="%marker.name.problem"
-         point="org.eclipse.core.resources.markers">
-      <!-- Roslyn only answers diagnostic pulls, so aCute creates the markers itself. -->
-      <super type="org.eclipse.core.resources.problemmarker"/>
-      <super type="org.eclipse.core.resources.textmarker"/>
-      <persistent value="false"/>
    </extension>
    <extension
          point="org.eclipse.tm4e.registry.grammars">
