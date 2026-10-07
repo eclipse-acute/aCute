@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.concurrent.atomic.AtomicReference;
@@ -117,8 +118,11 @@ public class TestLSPIntegration extends AbstractAcuteTest {
 			}
 		});
 		DisplayHelper.sleep(500); // time to fill marker details
-		IMarker marker = csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO)[0];
-		assertTrue(marker.getType().contains("lsp4e"));
-		assertEquals(12, marker.getAttribute(IMarker.LINE_NUMBER, -1));
+		boolean found = false;
+		IMarker[] markers = csharpSourceFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
+		for (IMarker marker : markers) {
+			found |= (marker.getType().contains("lsp4e") && marker.getAttribute(IMarker.LINE_NUMBER, -1) == 12); 
+		}
+		assertTrue(found, "Marker not found");
 	}
 }

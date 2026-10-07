@@ -7,7 +7,7 @@ Bundle-Activator: org.eclipse.acute.AcutePlugin
 Bundle-Vendor: %Bundle-Vendor
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.lsp4e;bundle-version="0.1.0",
+ org.eclipse.lsp4e;bundle-version="0.19.16",
  org.eclipse.tm4e.core,
  org.eclipse.ui.genericeditor;bundle-version="1.0.0",
  org.eclipse.tm4e.ui,
